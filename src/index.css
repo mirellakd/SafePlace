@@ -1,0 +1,1928 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   SAFE PLACE — DIREÇÃO DE ARTE TÁTIL, EXPRESSIVA E ACOLHEDORA
+   Paleta estritamente sólida (PROIBIDO gradientes, brilhos, sombras difusas ou glassmorphism):
+   - Lilás principal: #CDB9F7
+   - Lilás claro:     #EDE6FD
+   - Azul-escuro:     #15174D
+   - Branco:          #FFFFFF
+   Tipografia:
+   - Display: 'Bagel Fat One', 'Bowlby One', sans-serif (SEMPRE em títulos/logo/selos, NUNCA em parágrafos)
+   - Corpo/Menus/Botões: 'Atkinson Hyperlegible', sans-serif (Base 19px, mínimo absoluto 17px em tudo!)
+   ========================================================================== */
+
+:root {
+  --base-font-size: 19px;
+
+  /* Cores sólidas principais */
+  --lilac-main: #CDB9F7;
+  --lilac-light: #EDE6FD;
+  --ink: #15174D;
+  --surface-white: #FFFFFF;
+
+  /* Cores de alerta usadas SOMENTE dentro de caixas de perigo, cuidado e ajuda */
+  --warn-bg: #FFF6D6;
+  --warn-border: #15174D;
+  --warn-badge: #F59E0B;
+
+  --safe-bg: #E6FAEE;
+  --safe-border: #15174D;
+  --safe-badge: #15803D;
+
+  --danger-bg: #FFE8E8;
+  --danger-border: #991B1B;
+  --danger-badge: #B91C1C;
+
+  /* Traços e sombras sólidas (estilo adesivo / feito à mão, zero blur!) */
+  --border-thin: 2px solid var(--ink);
+  --border-thick: 3px solid var(--ink);
+  --shadow-card: 5px 5px 0px var(--ink);
+  --shadow-btn: 4px 4px 0px var(--ink);
+  --shadow-on-dark: 4px 4px 0px var(--lilac-main);
+
+  --radius-card: 28px;
+  --radius-frame: 32px;
+  --radius-pill: 999px;
+
+  --font-display: 'Bagel Fat One', 'Bowlby One', cursive, sans-serif;
+  --font-body: 'Atkinson Hyperlegible', system-ui, -apple-system, sans-serif;
+}
+
+/* ==========================================================================
+   MODO ALTO CONTRASTE (Branco Puro #FFFFFF + Lilás Claro #EDE6FD + Azul-Noite #0B0D36,
+   amarelo usado apenas em pequenos detalhes de foco)
+   ========================================================================== */
+html.high-contrast {
+  --lilac-main: #FFFFFF;
+  --lilac-light: #EDE6FD;
+  --ink: #0B0D36;
+  --surface-white: #FFFFFF;
+
+  --warn-bg: #FFFBEB;
+  --warn-border: #0B0D36;
+  --warn-badge: #B45309;
+
+  --safe-bg: #ECFDF5;
+  --safe-border: #0B0D36;
+  --safe-badge: #047857;
+
+  --danger-bg: #FEF2F2;
+  --danger-border: #991B1B;
+  --danger-badge: #991B1B;
+
+  --shadow-card: 5px 5px 0px #0B0D36;
+  --shadow-btn: 4px 4px 0px #0B0D36;
+  --shadow-on-dark: 4px 4px 0px #FDE047;
+}
+
+/* ==========================================================================
+   BASE & REGRAS DE ACESSIBILIDADE (NADA MENOR QUE 17PX)
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: var(--base-font-size);
+  scroll-behavior: smooth;
+  scroll-padding-top: 4.5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+section,
+h1,
+h2,
+.wizard-card,
+.filter-pills-bar {
+  scroll-margin-top: 4.5rem;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1rem; /* 19px padrão */
+  line-height: 1.6;
+  background-color: var(--lilac-main);
+  color: var(--ink);
+  padding-bottom: 0;
+  overflow-x: hidden;
+}
+
+/* Foco de teclado nítido de 3px sólido */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.band-navy a:focus-visible,
+.band-navy button:focus-visible,
+.marquee-bar button:focus-visible,
+.floating-help-pill:focus-visible {
+  outline: 3px solid var(--lilac-main);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0.75rem;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--surface-white);
+  padding: 0.9rem 1.5rem;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: 1rem;
+}
+
+.icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  flex-shrink: 0;
+}
+
+/* Tipografia Display: SEMPRE maiúsculas e expressiva nos títulos */
+.display-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 1.08;
+  letter-spacing: 0.01em;
+  margin-top: 0;
+  text-wrap: balance;
+}
+
+p,
+li,
+label,
+input,
+button {
+  font-family: var(--font-body);
+}
+
+/* ==========================================================================
+   1. FAIXA DE TEXTO EM MOVIMENTO (MARQUEE) — TOPO E ENTRE SEÇÕES
+   ========================================================================== */
+@keyframes slowMarquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-bar {
+  background-color: var(--ink);
+  color: var(--surface-white);
+  border-bottom: 2px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.35rem 0.75rem 0.35rem 0;
+  gap: 0.5rem;
+}
+
+html.high-contrast .marquee-bar {
+  background-color: #0B0D36;
+  color: #FFFFFF;
+  border-bottom: 3px solid #0B0D36;
+}
+
+.marquee-divider {
+  background-color: var(--ink);
+  color: var(--lilac-main);
+  padding: 0.65rem 0;
+  overflow: hidden;
+  border-top: var(--border-thick);
+  border-bottom: var(--border-thick);
+}
+
+html.high-contrast .marquee-divider {
+  background-color: #0B0D36;
+  color: #FFFFFF;
+}
+
+.marquee-viewport {
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+  animation: slowMarquee 34s linear infinite;
+}
+
+.marquee-track span {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 1rem; /* >= 19px */
+  letter-spacing: 0.04em;
+  padding-right: 1.5rem;
+}
+
+/* Parada total via botão ou preferência do sistema */
+body.marquee-paused .marquee-track {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee-track,
+  .round-sticker-svg {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.marquee-pause-btn {
+  min-height: 44px;
+  padding: 0.35rem 0.95rem;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--lilac-main);
+  background-color: var(--ink);
+  color: var(--surface-white);
+  font-size: 0.92rem; /* >= 17.5px */
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+html.high-contrast .marquee-pause-btn {
+  background-color: #0B0D36;
+  color: #FFFFFF;
+  border-color: #FDE047;
+}
+
+/* ==========================================================================
+   BARRA DE CONTROLES DE ACESSIBILIDADE SEMPRE VISÍVEL
+   ========================================================================== */
+.a11y-strip {
+  background-color: var(--lilac-light);
+  border-bottom: var(--border-thin);
+  padding: 0.45rem 1rem;
+}
+
+.a11y-strip-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.a11y-strip-caption {
+  font-weight: 700;
+  font-size: 0.95rem; /* >= 18px */
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .a11y-strip-caption {
+    display: inline;
+  }
+}
+
+.a11y-controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+}
+
+@media (min-width: 900px) {
+  .a11y-controls-row {
+    width: auto;
+  }
+}
+
+.a11y-pill-btn {
+  min-height: 50px;
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-pill);
+  border: var(--border-thin);
+  background-color: var(--surface-white);
+  color: var(--ink);
+  font-size: 0.92rem; /* >= 17.5px */
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  box-shadow: 2px 2px 0px var(--ink);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+  flex: 1 1 auto;
+}
+
+@media (min-width: 640px) {
+  .a11y-pill-btn {
+    min-height: 56px;
+    padding: 0.55rem 1.15rem;
+    font-size: 0.96rem;
+    flex: 0 0 auto;
+  }
+}
+
+.a11y-pill-btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px var(--ink);
+}
+
+.a11y-pill-btn[aria-pressed='true'] {
+  background-color: var(--ink);
+  color: var(--surface-white);
+}
+
+.a11y-pill-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.label-short {
+  display: inline;
+}
+.label-long {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .label-short {
+    display: none;
+  }
+  .label-long {
+    display: inline;
+  }
+}
+
+/* ==========================================================================
+   2. CABEÇALHO PRINCIPAL (3 ZONAS NO DESKTOP)
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background-color: var(--lilac-main);
+  border-bottom: var(--border-thick);
+}
+
+.header-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand-wordmark {
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 3vw, 2.15rem);
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.desktop-nav {
+  display: none;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+@media (min-width: 769px) {
+  .desktop-nav {
+    display: flex;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktop-nav {
+    gap: 1.6rem;
+  }
+}
+
+.desktop-nav-link {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem; /* 19px */
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.45rem 0.2rem;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+}
+
+.desktop-nav-link:hover,
+.desktop-nav-link.is-active {
+  border-bottom-color: var(--ink);
+}
+
+.pill-btn.header-cta {
+  display: none;
+  white-space: nowrap;
+}
+
+@media (min-width: 769px) {
+  .pill-btn.header-cta {
+    display: inline-flex;
+  }
+}
+
+/* ==========================================================================
+   5. BOTÕES EM FORMATO DE PÍLULA COM SOMBRA SÓLIDA DESLOCADA (MÍNIMO 56PX)
+   ========================================================================== */
+.pill-btn {
+  min-height: 58px;
+  padding: 0.8rem 1.55rem;
+  border-radius: var(--radius-pill);
+  border: var(--border-thick);
+  font-family: var(--font-body);
+  font-size: 1rem; /* >= 19px */
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  transition: transform 130ms ease, box-shadow 130ms ease;
+}
+
+.pill-btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--ink);
+}
+
+.pill-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px var(--ink);
+}
+
+.pill-btn-navy {
+  background-color: var(--ink);
+  color: var(--surface-white);
+}
+
+.pill-btn-white {
+  background-color: var(--surface-white);
+  color: var(--ink);
+}
+
+.pill-btn-lilac {
+  background-color: var(--lilac-main);
+  color: var(--ink);
+}
+
+.pill-btn-light {
+  background-color: var(--lilac-light);
+  color: var(--ink);
+}
+
+/* Quando o botão está sobre seção azul-escuro */
+.band-navy .pill-btn-lilac,
+.band-navy .pill-btn-white {
+  border-color: var(--surface-white);
+  box-shadow: 4px 4px 0px var(--lilac-main);
+}
+
+.band-navy .pill-btn-lilac:hover,
+.band-navy .pill-btn-white:hover {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px var(--lilac-main);
+}
+
+/* ==========================================================================
+   BANDAS DE LARGURA TOTAL COM CORES ALTERNADAS (RITMO EDITORIAL)
+   ========================================================================== */
+.band {
+  width: 100%;
+  padding: 1.35rem 1rem;
+  border-bottom: var(--border-thick);
+}
+
+/* Espaço extra (>= 96px) no fim da última seção de todas as páginas no celular para o botão Ajuda nunca cobrir nada */
+@media (max-width: 768px) {
+  main > .band:last-child {
+    padding-bottom: 6rem; /* ~114px >= 96px */
+  }
+}
+
+@media (min-width: 769px) {
+  .band {
+    padding: 4.5rem 2rem;
+  }
+}
+
+.band-lilac {
+  background-color: var(--lilac-main);
+  color: var(--ink);
+}
+
+.band-light {
+  background-color: var(--lilac-light);
+  color: var(--ink);
+}
+
+.band-white {
+  background-color: var(--surface-white);
+  color: var(--ink);
+}
+
+.band-navy {
+  background-color: var(--ink);
+  color: var(--surface-white);
+}
+
+html.high-contrast .band-navy {
+  background-color: #0B0D36;
+  color: #FFFFFF;
+}
+
+.band-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.band-narrow {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.section-heading-xl {
+  font-size: clamp(2.15rem, 5.2vw, 3.85rem);
+  margin-bottom: 0.75rem;
+}
+
+.section-heading-lg {
+  font-size: clamp(1.85rem, 4.2vw, 3.1rem);
+  margin-bottom: 0.65rem;
+}
+
+.section-lead {
+  font-size: 1.08rem;
+  max-width: 60ch;
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+/* ==========================================================================
+   3. HERO ASSIMÉTRICO + MOLDURA DE ILUSTRAÇÃO (32PX, BORDA 3PX)
+   ========================================================================== */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.2rem;
+  align-items: center;
+}
+
+@media (min-width: 960px) {
+  .hero-grid {
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 2.8rem;
+  }
+}
+
+.hero-kicker {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 1rem;
+  background-color: var(--surface-white);
+  border: var(--border-thin);
+  border-radius: var(--radius-pill);
+  padding: 0.35rem 1rem;
+  margin-bottom: 1rem;
+  transform: rotate(-1.5deg);
+}
+
+.hero-display-title {
+  font-size: clamp(2.45rem, 6vw, 4.55rem);
+  margin-bottom: 1rem;
+}
+
+.hero-subcopy {
+  font-size: 1.12rem;
+  max-width: 50ch;
+  margin-bottom: 1.65rem;
+}
+
+.hero-frame-card {
+  position: relative;
+  background-color: var(--lilac-light);
+  border: var(--border-thick);
+  border-radius: var(--radius-frame);
+  padding: 1.4rem;
+  box-shadow: 8px 8px 0px var(--ink);
+}
+
+.illus-hero-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Campo de Busca Grande estilo adesivo */
+.tactile-search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+@media (min-width: 640px) {
+  .tactile-search-form {
+    flex-direction: row;
+  }
+}
+
+.tactile-input-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.tactile-input-icon {
+  position: absolute;
+  left: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink);
+  pointer-events: none;
+  display: flex;
+}
+
+.tactile-search-input {
+  width: 100%;
+  min-height: 60px;
+  padding: 0.85rem 1.2rem 0.85rem 3.2rem;
+  border-radius: var(--radius-pill);
+  border: var(--border-thick);
+  background-color: var(--surface-white);
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-btn);
+}
+
+.tactile-search-input::placeholder {
+  color: var(--ink);
+  opacity: 0.72;
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   4. CARTÕES TÁTEIS ASSIMÉTRICOS (AFUNDAM 4PX AO TOCAR/PASSAR O MOUSE)
+   ========================================================================== */
+.tactile-card {
+  background-color: var(--lilac-light);
+  border: var(--border-thin);
+  border-radius: var(--radius-card);
+  padding: 1.65rem;
+  color: var(--ink);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.1rem;
+  box-shadow: 4px 4px 0px var(--ink);
+  transition: transform 140ms ease, box-shadow 140ms ease;
+  position: relative;
+}
+
+.tactile-card-white {
+  background-color: var(--surface-white);
+}
+
+.tactile-card-lilac {
+  background-color: var(--lilac-main);
+}
+
+a.tactile-card:hover,
+button.tactile-card:hover {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px var(--ink);
+}
+
+/* Grade Assimétrica para os 4 caminhos principais (nada de 4 quadrados monótonos) */
+.asymmetric-paths-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.35rem;
+}
+
+@media (min-width: 860px) {
+  .asymmetric-paths-grid {
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+  }
+  .path-span-7 {
+    grid-column: span 7;
+  }
+  .path-span-5 {
+    grid-column: span 5;
+  }
+}
+
+.path-card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 560px) {
+  .path-card-inner {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.35rem;
+  }
+}
+
+.illus-spot {
+  width: 5.4rem;
+  height: 5.4rem;
+  flex-shrink: 0;
+}
+
+.card-title-bold {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.28;
+  margin: 0 0 0.4rem;
+}
+
+.card-desc {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.card-cta-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ==========================================================================
+   6. SEÇÃO AZUL-ESCURO COM ETIQUETAS EM PÍLULA INCLINADAS AO REDOR DA FRASE
+   ========================================================================== */
+.statement-arena {
+  position: relative;
+  padding: 2rem 0.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.scattered-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.85rem;
+}
+
+.tilted-tag {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-pill);
+  border: 2.5px solid var(--surface-white);
+  font-weight: 700;
+  font-size: 0.96rem; /* >= 18px */
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 3px 3px 0px var(--lilac-main);
+  transition: transform 140ms ease;
+}
+
+.tilted-tag-lilac {
+  background-color: var(--lilac-main);
+  color: var(--ink);
+}
+
+.tilted-tag-white {
+  background-color: var(--surface-white);
+  color: var(--ink);
+}
+
+.tilted-tag-light {
+  background-color: var(--lilac-light);
+  color: var(--ink);
+}
+
+.tilt-left-1 {
+  transform: rotate(-5deg);
+}
+.tilt-right-1 {
+  transform: rotate(4deg);
+}
+.tilt-left-2 {
+  transform: rotate(-3deg);
+}
+.tilt-right-2 {
+  transform: rotate(6deg);
+}
+
+a.tilted-tag:hover {
+  transform: rotate(0deg) scale(1.04);
+}
+
+.statement-giant-quote {
+  font-size: clamp(2.1rem, 5.5vw, 4.1rem);
+  color: var(--surface-white);
+  max-width: 17ch;
+  margin: 0.35rem auto;
+}
+
+html.high-contrast .statement-giant-quote {
+  color: #FFFFFF;
+}
+
+.statement-sub {
+  font-size: 1.12rem;
+  color: var(--lilac-light);
+  max-width: 48ch;
+  margin: 0 auto;
+}
+
+html.high-contrast .statement-sub {
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   7. SELOS REDONDOS GIRATÓRIOS (STICKERS SOBREPOSTOS NOS CANTOS)
+   ========================================================================== */
+@keyframes slowSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sticker-badge-corner {
+  width: 6.4rem;
+  height: 6.4rem;
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .sticker-badge-float {
+    position: absolute;
+    top: -2.2rem;
+    right: -1.4rem;
+    z-index: 5;
+  }
+}
+
+.round-sticker-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  animation: slowSpin 26s linear infinite;
+}
+
+/* ==========================================================================
+   8. SEÇÃO DE 3 PASSOS ("PASSO 1 · Pare", "PASSO 2 · Confira", "PASSO 3")
+   ========================================================================== */
+.steps-trio-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (min-width: 860px) {
+  .steps-trio-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.6rem;
+  }
+  /* Leve desnível editorial para fugir de grade robótica */
+  .step-card-offset-2 {
+    margin-top: 1.4rem;
+  }
+  .step-card-offset-3 {
+    margin-top: 2.8rem;
+  }
+}
+
+.step-pill-label {
+  display: inline-block;
+  align-self: flex-start;
+  background-color: var(--ink);
+  color: var(--surface-white);
+  padding: 0.4rem 1.05rem;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 0.95rem; /* >= 18px */
+  letter-spacing: 0.02em;
+}
+
+/* ==========================================================================
+   9. GOLPE DA SEMANA + DICA DO DIA (LAYOUT ASSIMÉTRICO DESTACADO)
+   ========================================================================== */
+.spotlight-duo-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: stretch;
+}
+
+@media (min-width: 920px) {
+  .spotlight-duo-grid {
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 2.2rem;
+  }
+}
+
+.scam-week-card {
+  background-color: var(--surface-white);
+  border: var(--border-thick);
+  border-radius: var(--radius-frame);
+  padding: 2rem 1.65rem;
+  box-shadow: 7px 7px 0px var(--ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .scam-week-card {
+    padding: 2.4rem;
+  }
+}
+
+.danger-meter-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  background-color: var(--danger-bg);
+  color: #7F1D1D;
+  border: 2px solid var(--danger-border);
+  border-radius: var(--radius-pill);
+  padding: 0.45rem 1.1rem;
+  align-self: flex-start;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+html.high-contrast .danger-meter-row {
+  background-color: var(--danger-bg);
+  color: #991B1B;
+}
+
+.danger-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.danger-dot {
+  width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  display: inline-block;
+}
+
+.danger-dot.is-filled {
+  background-color: var(--danger-badge);
+  border-color: var(--danger-badge);
+}
+
+.daily-tip-box {
+  position: relative;
+  background-color: var(--lilac-light);
+  border: var(--border-thick);
+  border-radius: var(--radius-frame);
+  padding: 2rem 1.65rem;
+  box-shadow: 7px 7px 0px var(--ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.2rem;
+}
+
+/* Lista editorial variada para os 6 golpes mais comuns */
+.editorial-scams-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.35rem;
+}
+
+@media (min-width: 720px) {
+  .editorial-scams-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1040px) {
+  .editorial-scams-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  .editorial-scams-grid > :nth-child(1),
+  .editorial-scams-grid > :nth-child(2) {
+    grid-column: span 3;
+  }
+  .editorial-scams-grid > :nth-child(3),
+  .editorial-scams-grid > :nth-child(4),
+  .editorial-scams-grid > :nth-child(5) {
+    grid-column: span 2;
+  }
+  .editorial-scams-grid > :nth-child(6) {
+    grid-column: span 6;
+  }
+}
+
+/* ==========================================================================
+   PÁGINAS INTERNAS: GOLPES, MOCKUP WHATSAPP/SMS, CHECKLIST, SIMULADOR E AULAS
+   ========================================================================== */
+.back-nav-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-bottom: 1.75rem;
+}
+
+.page-hero-card {
+  position: relative;
+  background-color: var(--surface-white);
+  border: var(--border-thick);
+  border-radius: var(--radius-frame);
+  padding: 1.85rem 1.5rem;
+  box-shadow: 6px 6px 0px var(--ink);
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .page-hero-card {
+    padding: 2.5rem;
+  }
+}
+
+.kicker-label {
+  font-weight: 700;
+  font-size: 0.96rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: block;
+  margin-bottom: 0.55rem;
+}
+
+/* Mockup de Mensagem Realista */
+.mockup-frame {
+  background-color: var(--surface-white);
+  border: var(--border-thick);
+  border-radius: var(--radius-frame);
+  padding: 1.6rem 1.35rem;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 1.75rem;
+}
+
+.phone-window {
+  background-color: var(--lilac-light);
+  border: var(--border-thick);
+  border-radius: 24px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.phone-header-bar {
+  background-color: var(--ink);
+  color: var(--surface-white);
+  padding: 0.85rem 1.15rem;
+}
+
+.phone-sender-title {
+  font-weight: 700;
+  font-size: 1rem;
+  display: block;
+}
+
+.phone-sender-meta {
+  font-size: 0.92rem; /* >= 17.5px */
+  opacity: 0.92;
+  display: block;
+}
+
+.phone-messages-area {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.message-bubble {
+  background-color: var(--surface-white);
+  color: var(--ink);
+  border: var(--border-thin);
+  border-radius: 6px 22px 22px 22px;
+  padding: 0.95rem 1.15rem;
+  max-width: 94%;
+  box-shadow: 3px 3px 0px var(--ink);
+}
+
+.message-time {
+  display: block;
+  text-align: right;
+  font-size: 0.9rem; /* >= 17px */
+  font-weight: 700;
+  margin-top: 0.35rem;
+}
+
+/* Caixas de Alerta Semânticas (Amarelo / Verde / Vermelho — SOMENTE para avisos) */
+.alert-panel {
+  border-radius: var(--radius-frame);
+  padding: 1.75rem 1.45rem;
+  margin-bottom: 1.75rem;
+  border: 3px solid var(--ink);
+  box-shadow: var(--shadow-card);
+}
+
+@media (min-width: 768px) {
+  .alert-panel {
+    padding: 2.1rem 2.2rem;
+  }
+}
+
+.alert-panel-warn {
+  background-color: var(--warn-bg);
+  border-color: var(--warn-border);
+  color: var(--ink);
+}
+
+.alert-panel-safe {
+  background-color: var(--safe-bg);
+  border-color: var(--safe-border);
+  color: var(--ink);
+}
+
+.alert-panel-danger {
+  background-color: var(--danger-bg);
+  border-color: var(--danger-border);
+  color: #450A0A;
+}
+
+html.high-contrast .alert-panel-danger {
+  color: #450A0A;
+}
+
+.alert-panel-calm {
+  background-color: var(--lilac-light);
+  border-color: var(--ink);
+  color: var(--ink);
+  position: relative;
+}
+
+.alert-panel-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0 0 1.15rem;
+}
+
+.step-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.step-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+.num-circle {
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 50%;
+  background-color: var(--ink);
+  color: var(--surface-white);
+  font-weight: 700;
+  font-size: 0.96rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.alert-panel-danger .num-circle {
+  background-color: var(--danger-badge);
+  color: #FFFFFF;
+}
+
+html.high-contrast .alert-panel-danger .num-circle {
+  color: #FFFFFF;
+}
+
+/* Checklist e Simulador Interativos */
+.question-card {
+  background-color: var(--surface-white);
+  border: var(--border-thin);
+  border-radius: var(--radius-card);
+  padding: 1.55rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 4px 4px 0px var(--ink);
+}
+
+.binary-choices {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  margin-top: 1.1rem;
+}
+
+@media (min-width: 520px) {
+  .binary-choices {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.choice-pill {
+  min-height: 58px;
+  padding: 0.7rem 1.2rem;
+  border-radius: var(--radius-pill);
+  border: var(--border-thick);
+  background-color: var(--lilac-light);
+  color: var(--ink);
+  font-size: 1.02rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  box-shadow: 3px 3px 0px var(--ink);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.choice-pill:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--ink);
+}
+
+.choice-pill.is-selected {
+  background-color: var(--ink);
+  color: var(--surface-white);
+  transform: translate(3px, 3px);
+  box-shadow: 0px 0px 0px var(--ink);
+}
+
+/* Abas de filtro em pílula */
+.filter-pills-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-bottom: 1.75rem;
+}
+
+/* ==========================================================================
+   10. RODAPÉ COM NOME GIGANTE EM LARGURA TOTAL SOBRE LILÁS
+   ========================================================================== */
+.site-footer {
+  background-color: var(--lilac-main);
+  color: var(--ink);
+  padding: 1.65rem 1rem calc(8.2rem + env(safe-area-inset-bottom, 0px));
+  border-top: var(--border-thick);
+}
+
+@media (min-width: 769px) {
+  .site-footer {
+    padding: 3rem 1.15rem 5.5rem;
+  }
+}
+
+.footer-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.footer-top-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 860px) {
+  .footer-top-grid {
+    flex-direction: row;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+  }
+}
+
+.footer-tagline {
+  font-size: 1.05rem;
+  font-weight: 700;
+  max-width: 46ch;
+  margin: 0;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 1.2rem;
+}
+
+.footer-links a {
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.footer-giant-brand {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  color: var(--ink);
+  font-size: clamp(2.85rem, 13.4vw, 11.2rem);
+  line-height: 0.92;
+  text-align: center;
+  width: 100%;
+  margin: 0.85rem 0 1.15rem;
+  letter-spacing: 0.01em;
+  user-select: none;
+}
+
+.footer-legal {
+  text-align: center;
+  font-size: 0.95rem; /* >= 18px */
+  margin: 0;
+}
+
+/* ==========================================================================
+   BOTÃO FLUTUANTE PÍLULA ("Ajuda" COMPACTO NO CELULAR <= 768px) + BARRA INFERIOR
+   ========================================================================== */
+.floating-help-pill {
+  position: fixed;
+  right: 0.85rem;
+  bottom: calc(4.85rem + env(safe-area-inset-bottom, 0px));
+  z-index: 45;
+  min-height: 52px;
+  padding: 0.55rem 1.05rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--ink);
+  color: var(--surface-white);
+  border: 2.5px solid var(--surface-white);
+  box-shadow: 3px 3px 0px var(--ink);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem; /* >= 18px */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+  transition: transform 130ms ease;
+}
+
+.floating-help-label-desktop {
+  display: none;
+}
+
+.floating-help-label-mobile {
+  display: inline;
+}
+
+@media (min-width: 769px) {
+  .floating-help-pill {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    min-height: 58px;
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+    border-width: 3px;
+    box-shadow: 4px 4px 0px var(--ink);
+  }
+  .floating-help-label-desktop {
+    display: inline;
+  }
+  .floating-help-label-mobile {
+    display: none;
+  }
+}
+
+.floating-help-pill:hover {
+  transform: translate(2px, 2px);
+}
+
+html.high-contrast .floating-help-pill {
+  background-color: #0B0D36;
+  color: #FFFFFF;
+  border-color: #FDE047;
+}
+
+.floating-help-pill.is-hidden-on-help {
+  display: none;
+}
+
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 44;
+  background-color: var(--surface-white);
+  border-top: var(--border-thick);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  min-height: 66px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (min-width: 769px) {
+  .mobile-bottom-nav {
+    display: none;
+  }
+}
+
+.mobile-nav-item {
+  min-height: 62px;
+  padding: 0.35rem 0.25rem;
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.9rem; /* >= 17.1px — respeita regra >= 17px em tudo! */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.18rem;
+  border-right: 1.5px solid var(--ink);
+}
+
+.mobile-nav-item:last-child {
+  border-right: none;
+}
+
+.mobile-nav-item.is-active {
+  background-color: var(--lilac-main);
+  color: var(--ink);
+}
+
+html.high-contrast .mobile-nav-item.is-active {
+  background-color: #0B0D36;
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   LAYOUT EXCLUSIVO DE CELULAR (ATÉ 768PX):
+   1) CARROSSÉIS HORIZONTAIS COM SCROLL-SNAP, BOLINHAS E SETAS >= 56PX
+   2) PÁGINAS MAIS CURTAS E ETIQUETAS DE FILTRO COM ROLAGEM LATERAL
+   3) ACORDEÕES ACESSÍVEIS (>= 56PX DE ÁREA DE TOQUE) PARA TEXTOS LONGOS
+   4) CHECKLIST E QUIZ PASSO A PASSO (1 PERGUNTA POR VEZ, BOTÕES >= 64PX)
+   ========================================================================== */
+
+/* Utilitários de visibilidade Desktop vs Celular (768px) */
+.mobile-only-view {
+  display: block;
+}
+
+.desktop-only-view {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .mobile-only-view {
+    display: none !important;
+  }
+  .desktop-only-view {
+    display: block !important;
+  }
+  /* No computador, esconde dicas e controles exclusivos do carrossel mobile */
+  .carousel-swipe-hint,
+  .mobile-carousel-controls,
+  .mobile-accordion-chevron-wrap {
+    display: none !important;
+  }
+  .mobile-accordion-content {
+    display: block !important;
+  }
+  .mobile-accordion-trigger {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0 0 1.15rem;
+    color: inherit;
+    font-family: var(--font-body);
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    cursor: default;
+  }
+  .mobile-accordion-title-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Deixa o topo mais enxuto no celular para a saudação + busca caberem já na 1ª tela */
+  .a11y-strip {
+    padding: 0.35rem 0.65rem;
+  }
+  .a11y-controls-row {
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+  }
+  .a11y-pill-btn {
+    min-height: 46px;
+    padding: 0.35rem 0.55rem;
+    font-size: 0.9rem; /* >= 17.1px */
+  }
+  #label-speak {
+    max-width: 5.5ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Hero compacto na página inicial mobile: foco total em Saudação + Busca sem empurrar tudo para baixo */
+  .hero-frame-card-home {
+    display: none;
+  }
+  .hero-display-title {
+    font-size: 2.15rem;
+    margin-bottom: 0.55rem;
+  }
+  .hero-subcopy {
+    font-size: 1rem;
+    margin-bottom: 1.05rem;
+  }
+  .section-heading-xl,
+  .section-heading-lg {
+    font-size: 1.75rem;
+    margin-bottom: 0.45rem;
+  }
+  .section-lead {
+    font-size: 0.98rem;
+    margin-bottom: 1rem;
+  }
+
+  /* 1. Carrossel Horizontal CSS Scroll-Snap (SOMENTE no celular <= 768px) */
+  .carousel-swipe-hint {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .carousel-swipe-hint.is-dismissed {
+    display: none !important;
+  }
+
+  .mobile-carousel-track {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    gap: 16px !important;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y pinch-zoom; /* Não prende o dedo ao rolar a página para cima/baixo! */
+    scrollbar-width: none;
+    padding: 2px 12px 8px 2px;
+    margin: 0 -0.25rem;
+  }
+
+  .mobile-carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Cada cartão ocupa ~83% da largura, deixando uma ponta visível do próximo cartão ao lado */
+  .mobile-carousel-track > * {
+    flex: 0 0 83% !important;
+    max-width: 83% !important;
+    min-width: 83% !important;
+    scroll-snap-align: start;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    height: auto;
+  }
+
+  .mobile-carousel-track .tactile-card,
+  .mobile-carousel-track .scam-week-card,
+  .mobile-carousel-track .daily-tip-box {
+    padding: 1.1rem 1.05rem;
+    gap: 0.75rem;
+  }
+
+  .mobile-carousel-track .illus-spot {
+    width: 3.3rem;
+    height: 3.3rem;
+  }
+
+  /* Indicadores abaixo do carrossel: Bolinhas grandes + Dupla de setas >= 56px alinhadas à esquerda (livres do botão Ajuda à direita) */
+  .mobile-carousel-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin-top: 0.7rem;
+  }
+
+  .carousel-dots-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.1rem;
+    width: 100%;
+  }
+
+  .carousel-dot-btn {
+    min-width: 30px;
+    min-height: 40px;
+    padding: 0.2rem;
+    border: none;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .carousel-dot-visual {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2.5px solid var(--ink);
+    background-color: transparent;
+    transition: transform 120ms ease, background-color 120ms ease;
+  }
+
+  .carousel-dot-btn.is-active .carousel-dot-visual {
+    background-color: var(--ink);
+    transform: scale(1.15);
+  }
+
+  .carousel-arrows-pair {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding-right: 7.5rem; /* Garante faixa livre em relação ao botão flutuante Ajuda no canto direito */
+  }
+
+  .carousel-arrow-btn {
+    min-height: 56px;
+    min-width: 56px;
+    padding: 0.5rem 0.95rem;
+    border-radius: var(--radius-pill);
+    border: var(--border-thick);
+    background-color: var(--surface-white);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 0.92rem; /* >= 17.5px */
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    cursor: pointer;
+    box-shadow: 3px 3px 0px var(--ink);
+    flex-shrink: 0;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+
+  .carousel-arrow-btn:active:not(:disabled) {
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px 0px var(--ink);
+  }
+
+  .carousel-arrow-btn:disabled {
+    opacity: 0.38;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  /* Etiquetas de filtro em pílula com rolagem lateral no celular */
+  .filter-pills-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    touch-action: pan-y pinch-zoom;
+    padding: 2px 4px 8px 2px;
+    margin-bottom: 1.15rem;
+  }
+
+  .filter-pills-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-pills-bar > * {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  /* 2. Acordeões para seções longas de texto no celular (área de toque >= 56px) */
+  .mobile-accordion {
+    padding: 0 !important;
+    overflow: hidden;
+  }
+
+  .mobile-accordion-trigger {
+    width: 100%;
+    min-height: 62px; /* >= 56px exigido */
+    padding: 1.05rem 1.2rem;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    cursor: pointer;
+  }
+
+  .mobile-accordion-title-left {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .mobile-accordion-chevron-wrap {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .accordion-chevron {
+    transition: transform 160ms ease;
+  }
+
+  .mobile-accordion-trigger[aria-expanded='true'] .accordion-chevron {
+    transform: rotate(180deg);
+  }
+
+  .mobile-accordion-content {
+    display: none;
+    padding: 0 1.2rem 1.35rem;
+    border-top: 2px solid rgba(21, 23, 77, 0.18);
+    padding-top: 1rem;
+  }
+
+  .mobile-accordion.is-open .mobile-accordion-content {
+    display: block;
+  }
+
+  /* 3. Passo a passo em tela cheia (Checklist da Loja + Quiz "Isso é golpe?") */
+  .wizard-card {
+    background-color: var(--surface-white);
+    border: var(--border-thick);
+    border-radius: var(--radius-frame);
+    padding: 1.4rem 1.2rem;
+    box-shadow: 5px 5px 0px var(--ink);
+    margin-bottom: 1.5rem;
+  }
+
+  .wizard-step-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  .wizard-progress-bar {
+    width: 100%;
+    height: 14px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--ink);
+    background-color: var(--lilac-light);
+    overflow: hidden;
+    margin: 0.6rem 0 1.25rem;
+  }
+
+  .wizard-progress-fill {
+    height: 100%;
+    background-color: var(--ink);
+    border-radius: var(--radius-pill);
+    transition: width 180ms ease;
+  }
+
+  .wizard-question-title {
+    font-size: 1.26rem;
+    font-weight: 700;
+    line-height: 1.32;
+    margin: 0 0 0.65rem;
+  }
+
+  .wizard-stacked-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-top: 1.25rem;
+  }
+
+  /* Botões enormes de Sim e Não, um embaixo do outro, altura mínima de 64px */
+  .wizard-big-choice-btn {
+    width: 100%;
+    min-height: 66px; /* >= 64px */
+    padding: 0.9rem 1.25rem;
+    border-radius: var(--radius-pill);
+    border: var(--border-thick);
+    background-color: var(--lilac-light);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 1.12rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px var(--ink);
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+
+  .wizard-big-choice-btn:active,
+  .wizard-big-choice-btn.is-selected {
+    background-color: var(--ink);
+    color: var(--surface-white);
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px 0px var(--ink);
+  }
+
+  .wizard-footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--lilac-light);
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Safe Place — Segurança Digital e Aprendizado Fácil",
+  "description": "Guia acolhedor, simples e passo a passo para se proteger de golpes na internet, fazer compras seguras, conferir seu checklist de proteção e aprender a usar o celular no dia a dia.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
