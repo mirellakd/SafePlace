@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Safe Place — Segurança Digital e Aprendizado Fácil</title>
+    <meta
+      name="description"
+      content="Guia acolhedor, simples e passo a passo para se proteger de golpes na internet, fazer compras seguras, conferir seu checklist de proteção e aprender a usar o celular no dia a dia."
+    />
+    <meta property="og:title" content="Safe Place — Segurança Digital e Aprendizado Fácil" />
+    <meta
+      property="og:description"
+      content="Guia acolhedor, simples e passo a passo para se proteger de golpes na internet, fazer compras seguras, conferir seu checklist de proteção e aprender a usar o celular no dia a dia."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Tipografia: Bagel Fat One (display expressiva gordinha) + Atkinson Hyperlegible (texto corrido ultra legível) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bagel+Fat+One&family=Bowlby+One&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Link de pulo direto para navegação por teclado -->
+    <a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
+
+    <!-- 1. FAIXA DE TEXTO EM MOVIMENTO NO TOPO ("PARE ✦ RESPIRE ✦ CONFIRA ✦") com botão de pausar -->
+    <div class="marquee-bar" role="region" aria-label="Lembrete de calma">
+      <div class="marquee-viewport" aria-hidden="true">
+        <div class="marquee-track" id="top-marquee-track">
+          <span>PARE ✦ RESPIRE ✦ CONFIRA ✦ QUALQUER PESSOA PODE CAIR ✦ GOLPISTA TEM PRESSA, VOCÊ NÃO ✦ </span>
+          <span>PARE ✦ RESPIRE ✦ CONFIRA ✦ QUALQUER PESSOA PODE CAIR ✦ GOLPISTA TEM PRESSA, VOCÊ NÃO ✦ </span>
+        </div>
+      </div>
+      <button
+        type="button"
+        id="btn-toggle-marquee"
+        class="marquee-pause-btn"
+        aria-pressed="false"
+        aria-label="Pausar faixa em movimento"
+      >
+        <span id="label-marquee-toggle">Pausar</span>
+      </button>
+    </div>
+
+    <!-- Barra de Controles de Acessibilidade sempre visíveis (A- / A+, Alto Contraste, Ouvir esta página) -->
+    <div class="a11y-strip" role="region" aria-label="Controles de leitura e voz">
+      <div class="a11y-strip-inner">
+        <span class="a11y-strip-caption">Leitura confortável:</span>
+        <div class="a11y-controls-row">
+          <button
+            type="button"
+            id="btn-font-decrease"
+            class="a11y-pill-btn"
+            aria-label="Diminuir tamanho da letra (A menos)"
+          >
+            <span>A−</span>
+          </button>
+          <button
+            type="button"
+            id="btn-font-increase"
+            class="a11y-pill-btn"
+            aria-label="Aumentar tamanho da letra (A mais)"
+          >
+            <span>A+</span>
+          </button>
+          <button
+            type="button"
+            id="btn-contrast"
+            class="a11y-pill-btn"
+            aria-pressed="false"
+          >
+            <span class="a11y-btn-icon" id="icon-contrast" aria-hidden="true"></span>
+            <span class="label-short">Contraste</span>
+            <span class="label-long">Alto contraste</span>
+          </button>
+          <button
+            type="button"
+            id="btn-speak"
+            class="a11y-pill-btn"
+            aria-pressed="false"
+          >
+            <span class="a11y-btn-icon" id="icon-speak" aria-hidden="true"></span>
+            <span id="label-speak">Ouvir esta página</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. CABEÇALHO PRINCIPAL: Logo em fonte display à esquerda, menu central em MAIÚSCULAS, botão pílula à direita -->
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <a href="#inicio" class="brand-wordmark" aria-label="Safe Place — Ir para o início">
+          SAFE PLACE
+        </a>
+
+        <nav class="desktop-nav" aria-label="Menu principal">
+          <a href="#inicio" class="desktop-nav-link" data-nav="inicio">INÍCIO</a>
+          <a href="#golpes" class="desktop-nav-link" data-nav="golpes">GOLPES</a>
+          <a href="#compras-seguras" class="desktop-nav-link" data-nav="compras-seguras">COMPRAS</a>
+          <a href="#protecao" class="desktop-nav-link" data-nav="protecao">PROTEÇÃO</a>
+          <a href="#aprender" class="desktop-nav-link" data-nav="aprender">APRENDER</a>
+        </nav>
+
+        <a href="#ajuda" class="pill-btn pill-btn-navy header-cta" data-nav-cta="ajuda">
+          <span class="btn-icon-slot" id="icon-header-cta" aria-hidden="true"></span>
+          <span>Preciso de ajuda</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Anunciador invisível para leitores de tela -->
+    <div id="live-announcer" class="sr-only" aria-live="polite"></div>
+
+    <!-- Conteúdo principal em seções de largura total com cores alternadas -->
+    <main id="conteudo-principal" tabindex="-1"></main>
+
+    <!-- 10. RODAPÉ: Nome do site em tamanho gigante ocupando toda a largura sobre lilás -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-top-grid">
+          <p class="footer-tagline">
+            Calma. Confere antes de clicar. Qualquer pessoa pode cair — golpista é profissional, mas informação tranquila protege você todos os dias.
+          </p>
+          <nav class="footer-links" aria-label="Atalhos do rodapé">
+            <a href="#inicio">Início</a>
+            <a href="#golpes">Golpes</a>
+            <a href="#compras-seguras">Compras Seguras</a>
+            <a href="#protecao">Checklist de Proteção</a>
+            <a href="#aprender">Aprender no Celular</a>
+            <a href="#ajuda">Preciso de Ajuda</a>
+          </nav>
+        </div>
+
+        <div class="footer-giant-brand" aria-hidden="true">SAFE PLACE</div>
+
+        <p class="footer-legal">
+          Guia gratuito em português simples • Suas preferências e respostas ficam salvas somente neste aparelho.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Botão flutuante em todas as páginas: compacto ("Ajuda") no celular (<= 768px) e completo no computador -->
+    <a
+      href="#ajuda"
+      id="floating-help-btn"
+      class="floating-help-pill"
+      aria-label="Preciso de ajuda agora — orientações imediatas"
+    >
+      <span class="floating-help-icon" id="icon-floating-help" aria-hidden="true"></span>
+      <span class="floating-help-label-desktop">Preciso de ajuda agora</span>
+      <span class="floating-help-label-mobile">Ajuda</span>
+    </a>
+
+    <!-- Barra de navegação fixa inferior no celular (4 itens grandes) -->
+    <nav class="mobile-bottom-nav" aria-label="Navegação rápida no celular">
+      <a href="#inicio" class="mobile-nav-item" data-mobile-nav="inicio">
+        <span class="mobile-nav-icon" data-icon="home" aria-hidden="true"></span>
+        <span>Início</span>
+      </a>
+      <a href="#golpes" class="mobile-nav-item" data-mobile-nav="golpes">
+        <span class="mobile-nav-icon" data-icon="shield" aria-hidden="true"></span>
+        <span>Golpes</span>
+      </a>
+      <a href="#aprender" class="mobile-nav-item" data-mobile-nav="aprender">
+        <span class="mobile-nav-icon" data-icon="bookOpen" aria-hidden="true"></span>
+        <span>Aprender</span>
+      </a>
+      <a href="#ajuda" class="mobile-nav-item" data-mobile-nav="ajuda">
+        <span class="mobile-nav-icon" data-icon="lifeBuoy" aria-hidden="true"></span>
+        <span>Ajuda</span>
+      </a>
+    </nav>
+
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
